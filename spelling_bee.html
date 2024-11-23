@@ -120,10 +120,10 @@
             speakSpelling(currentWord);
             feedback.textContent = "";
         } else if (userInput === "no") {
-            feedback.textContent = `Ok. Try again!`;
+            feedback.textContent = `Ok. Try again! ${currentWord}`;
             speakSpelling(currentWord);
         } else {
-            feedback.textContent = `Incorrect. Try again!`;
+            feedback.textContent = `Incorrect. Try again! ${currentWord}`;
             speakSpelling(currentWord);
         }
     }
