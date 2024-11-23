@@ -24,54 +24,60 @@
             font-size: 14px;
             color: #888;
         }
+        .feedback {
+            font-size: 18px;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <h1>Spelling Test</h1>
     <button id="startBtn">Start</button>
     <div id="spellingDisplay"></div>
+    <div id="feedback" class="feedback"></div>
     <footer>
         <p>Made by Arnav Verma</p>
     </footer>
 
     <script>
         const spellings = [
-            "abrupt", "accede", "accelerate", "accidentally", "accompanied", "accost", "accumulate", "accuse", 
-            "aquittle", "adjourn", "afterward", "amphibian", "anachronism", "analysis", "ancestry", "angle", 
-            "ankle", "anywhere", "arrival", "artificial", "aspect", "attire", "attractive", "aversion", "ballot", 
-            "banana", "banquet", "battery", "belie", "belief", "bondage", "boycott", "brochure", "budgeting", 
-            "buffalo", "calendar", "campaign", "capitalization", "cartage", "cashier", "ceiling", "celebration", 
-            "chair", "chauffeur", "cheddar", "civil", "civilized", "civilization", "classification", "clientele", 
-            "commitment", "community", "conceive", "counterfeit", "critic", "criticize", "cuddle", "culprit", 
-            "cylinder", "deceive", "dehydration", "delegate", "delinquent", "demean", "dispoil", "develop", 
-            "development", "diagnosis", "didactic", "difficulty", "disposal", "disposition", "drawl", "duplicate", 
-            "durable", "elicit", "eliminate", "elliptical", "embarrass", "eminent", "employee", "emulate", 
-            "enable", "encode", "encyclopedia", "engineer", "enslave", "equipping", "evanescent", "evidently", 
-            "exclude", "exhale", "eon", "expediency", "expedite", "expenditure", "extension", "extract", 
-            "extraordinary", "exude", "familiar", "fastidious", "fiend", "flamboyant", "flexible", "foreign", 
-            "forfeit", "foundation", "fulfill", "futurity", "gaseous", "gauge", "genuine", "graduate", "grocery", 
-            "grovel", "guild", "handkerchief", "hearty", "heavily", "height", "hosiery", "hygiene", "illegal", 
-            "illiterate", "imbecile", "imitation", "inaugural", "incautious", "index", "induce", "indulge", 
-            "infection", "inferior", "inflate", "informal", "injury", "inscription", "insecure", "insinuate", 
-            "institution", "instrument", "intelligible", "interior", "invalid", "involved", "irrefutable", 
-            "jeopardize", "jewelry", "journey", "jurist", "kangaroo", "kerosene", "khaki", "kindergarten", 
-            "knowledge", "labeling", "laboratory", "laborious", "library", "literature", "logical", "lovely", 
-            "lying", "lyric", "maintenance", "mammal", "maneuver", "manuscript", "massive", "materialism", 
-            "menthol", "mercurial", "metallic", "microbe", "microcosm", "mileage", "miniature", "ministry", 
-            "misfortune", "mispronounce", "mistreat", "misunderstood", "mobilize", "monologue", "moreover", 
-            "mosquito", "murmur", "myth", "necessarily", "nickel", "niece", "nineteenth", "ninety", "ninth", 
-            "nondescript", "nonfiction", "nucleus", "obey", "obligate", "obnoxious", "obscure", "obstacle", 
-            "occasion", "occasionally", "occur", "odor", "offense", "oneself", "opossum", "opponent", "optimism", 
-            "organization", "organize", "pageant", "pamphlet", "parse", "particular", "persist", "persuade", 
-            "perspire", "pleat", "plethora", "policeman", "potato", "prairie", "predecessor", "presage", 
-            "pretzel", "prostrate", "protocol", "puddle", "putter", "quandary", "quantity", "rabbid", "ransack", 
-            "rapport", "raucous", "receipt", "recline", "recluse", "recognize", "recreation", "reccouring", 
+            "abrupt", "accede", "accelerate", "accidentally", "accompanied", "accost", "accumulate", "accuse",
+            "aquittle", "adjourn", "afterward", "amphibian", "anachronism", "analysis", "ancestry", "angle",
+            "ankle", "anywhere", "arrival", "artificial", "aspect", "attire", "attractive", "aversion", "ballot",
+            "banana", "banquet", "battery", "belie", "belief", "bondage", "boycott", "brochure", "budgeting",
+            "buffalo", "calendar", "campaign", "capitalization", "cartage", "cashier", "ceiling", "celebration",
+            "chair", "chauffeur", "cheddar", "civil", "civilized", "civilization", "classification", "clientele",
+            "commitment", "community", "conceive", "counterfeit", "critic", "criticize", "cuddle", "culprit",
+            "cylinder", "deceive", "dehydration", "delegate", "delinquent", "demean", "dispoil", "develop",
+            "development", "diagnosis", "didactic", "difficulty", "disposal", "disposition", "drawl", "duplicate",
+            "durable", "elicit", "eliminate", "elliptical", "embarrass", "eminent", "employee", "emulate",
+            "enable", "encode", "encyclopedia", "engineer", "enslave", "equipping", "evanescent", "evidently",
+            "exclude", "exhale", "eon", "expediency", "expedite", "expenditure", "extension", "extract",
+            "extraordinary", "exude", "familiar", "fastidious", "fiend", "flamboyant", "flexible", "foreign",
+            "forfeit", "foundation", "fulfill", "futurity", "gaseous", "gauge", "genuine", "graduate", "grocery",
+            "grovel", "guild", "handkerchief", "hearty", "heavily", "height", "hosiery", "hygiene", "illegal",
+            "illiterate", "imbecile", "imitation", "inaugural", "incautious", "index", "induce", "indulge",
+            "infection", "inferior", "inflate", "informal", "injury", "inscription", "insecure", "insinuate",
+            "institution", "instrument", "intelligible", "interior", "invalid", "involved", "irrefutable",
+            "jeopardize", "jewelry", "journey", "jurist", "kangaroo", "kerosene", "khaki", "kindergarten",
+            "knowledge", "labeling", "laboratory", "laborious", "library", "literature", "logical", "lovely",
+            "lying", "lyric", "maintenance", "mammal", "maneuver", "manuscript", "massive", "materialism",
+            "menthol", "mercurial", "metallic", "microbe", "microcosm", "mileage", "miniature", "ministry",
+            "misfortune", "mispronounce", "mistreat", "misunderstood", "mobilize", "monologue", "moreover",
+            "mosquito", "murmur", "myth", "necessarily", "nickel", "niece", "nineteenth", "ninety", "ninth",
+            "nondescript", "nonfiction", "nucleus", "obey", "obligate", "obnoxious", "obscure", "obstacle",
+            "occasion", "occasionally", "occur", "odor", "offense", "oneself", "opossum", "opponent", "optimism",
+            "organization", "organize", "pageant", "pamphlet", "parse", "particular", "persist", "persuade",
+            "perspire", "pleat", "plethora", "policeman", "potato", "prairie", "predecessor", "presage",
+            "pretzel", "prostrate", "protocol", "puddle", "putter", "quandary", "quantity", "rabbid", "ransack",
+            "rapport", "raucous", "receipt", "recline", "recluse", "recognize", "recreation", "reccouring",
             "rodeo", "rotund", "safety", "salvation", "saturate", "savor", "scholastic"
         ];
 
         let currentIndex = 0;
         let currentSpelling = spellings[currentIndex];
         const spellingDisplay = document.getElementById("spellingDisplay");
+        const feedbackDiv = document.getElementById("feedback");
         const startBtn = document.getElementById("startBtn");
 
         // Function to speak the spelling
@@ -81,11 +87,24 @@
             speechSynthesis.speak(speech);
         }
 
+        // Function to show typing effect
+        function typeFeedback(feedbackText) {
+            let i = 0;
+            feedbackDiv.textContent = "";
+            const interval = setInterval(() => {
+                feedbackDiv.textContent += feedbackText[i];
+                i++;
+                if (i === feedbackText.length) {
+                    clearInterval(interval);
+                }
+            }, 100);
+        }
+
         // Start button to begin the test
         startBtn.addEventListener("click", function() {
             startBtn.disabled = true; // Disable the start button
             speakSpelling(currentSpelling);
-            spellingDisplay.innerHTML = `Spelling #1: ${currentSpelling}`;
+            typeFeedback(`Spelling #1: Please type the word!`);
         });
 
         // Listen for input from the user
@@ -93,20 +112,22 @@
             if (event.key === "Enter") {
                 const userInput = prompt("Enter the spelling:");
                 if (userInput.toLowerCase() === currentSpelling.toLowerCase()) {
+                    typeFeedback("Correct! Saying next spelling...");
                     currentIndex++;
                     if (currentIndex < spellings.length) {
                         currentSpelling = spellings[currentIndex];
-                        speakSpelling(currentSpelling);
-                        spellingDisplay.innerHTML = `Spelling #${currentIndex + 1}: ${currentSpelling}`;
+                        setTimeout(() => {
+                            speakSpelling(currentSpelling);
+                            typeFeedback(`Spelling #${currentIndex + 1}: Please type the word!`);
+                        }, 1000);
                     } else {
-                        spellingDisplay.innerHTML = "You've completed all the spellings!";
+                        typeFeedback("You've completed all the spellings!");
                     }
                 } else {
-                    alert("Incorrect! Please try again.");
+                    typeFeedback("Incorrect! Try again.");
                 }
             }
         });
     </script>
 </body>
 </html>
-
