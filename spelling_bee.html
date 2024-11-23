@@ -3,101 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spelling Bee Game</title>
+    <title>Spelling Game</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            margin-top: 50px;
+            margin: 50px;
         }
-        .word {
+        .container {
+            display: inline-block;
+            text-align: left;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+        }
+        .spelling {
             font-size: 24px;
-            font-weight: bold;
-        }
-        .input-container {
-            margin-top: 20px;
-        }
-        .input-container input {
-            padding: 5px;
-            font-size: 16px;
+            margin-bottom: 20px;
         }
         .feedback {
-            margin-top: 20px;
             font-size: 18px;
-            font-weight: bold;
+            color: green;
         }
-        .btn {
+        .button {
+            padding: 10px 20px;
             background-color: #4CAF50;
             color: white;
-            padding: 10px 20px;
-            font-size: 16px;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
-            margin-top: 20px;
+        }
+        .button:disabled {
+            background-color: #ccc;
+        }
+        input {
+            padding: 8px;
+            font-size: 16px;
+            width: 200px;
         }
     </style>
 </head>
 <body>
 
-<h1>Spelling Bee Game</h1>
-
-<div class="word">
-    <p id="word-to-spell">Press "Start" to begin</p>
+<div class="container">
+    <h1>Spelling Game</h1>
+    <p id="word" class="spelling"></p>
+    <input type="text" id="userInput" placeholder="Type the spelling" />
+    <button class="button" onclick="checkSpelling()">Submit</button>
+    <p class="feedback" id="feedback"></p>
+    <p id="instructions">Type the spelling or type "yes" to hear it again, or "no" if you don't know it.</p>
 </div>
-
-<div class="input-container">
-    <input type="text" id="user-input" placeholder="Type the spelling here">
-</div>
-
-<div class="feedback" id="feedback"></div>
-
-<button class="btn" id="next-btn" onclick="nextWord()">Start</button>
 
 <script>
-    const words = [
+    const spellings = [
         "abrupt", "accede", "accelerate", "accidentally", "accompanied", "accost", "accumulate", "accuse", 
         "aquittle", "adjourn", "afterward", "amphibian", "anachronism", "analysis", "ancestry", "angle", 
         "ankle", "anywhere", "arrival", "artificial", "aspect", "attire", "attractive", "aversion", "ballot", 
         "banana", "banquet", "battery", "belie", "belief", "bondage", "boycott", "brochure", "budgeting", 
-        "buffalo", "calendar", "campaign", "capitalization", "cartage", "cashier", "ceiling", "celebration"
+        "buffalo", "calendar", "campaign", "capitalization", "cartage", "cashier", "ceiling", "celebration", 
+        "chair", "chauffeur", "cheddar", "civil", "civilized", "civilization", "classification", "clientele", 
+        "commitment", "community", "conceive", "counterfeit", "critic", "criticize", "cuddle", "culprit", 
+        "cylinder", "deceive", "dehydration", "delegate", "delinquent", "demean", "dispoil", "develop", 
+        "development", "diagnosis", "didactic", "difficulty", "disposal", "disposition", "drawl", "duplicate", 
+        "durable", "elicit", "eliminate", "elliptical", "embarrass", "eminent", "employee", "emulate", 
+        "enable", "encode", "encyclopedia", "engineer", "enslave", "equipping", "evanescent", "evidently", 
+        "exclude", "exhale", "eon", "expediency", "expedite", "expenditure", "extension", "extract", 
+        "extraordinary", "exude", "familiar", "fastidious", "fiend", "flamboyant", "flexible", "foreign", 
+        "forfeit", "foundation", "fulfill", "futurity", "gaseous", "gauge", "genuine", "graduate", "grocery", 
+        "grovel", "guild", "handkerchief", "hearty", "heavily", "height", "hosiery", "hygiene", "illegal", 
+        "illiterate", "imbecile", "imitation", "inaugural", "incautious", "index", "induce", "indulge", 
+        "infection", "inferior", "inflate", "informal", "injury", "inscription", "insecure", "insinuate", 
+        "institution", "instrument", "intelligible", "interior", "invalid", "involved", "irrefutable", 
+        "jeopardize", "jewelry", "journey", "jurist", "kangaroo", "kerosene", "khaki", "kindergarten", 
+        "knowledge", "labeling", "laboratory", "laborious", "library", "literature", "logical", "lovely", 
+        "lying", "lyric", "maintenance", "mammal", "maneuver", "manuscript", "massive", "materialism", 
+        "menthol", "mercurial", "metallic", "microbe", "microcosm", "mileage", "miniature", "ministry", 
+        "misfortune", "mispronounce", "mistreat", "misunderstood", "mobilize", "monologue", "moreover", 
+        "mosquito", "murmur", "myth", "necessarily", "nickel", "niece", "nineteenth", "ninety", "ninth", 
+        "nondescript", "nonfiction", "nucleus", "obey", "obligate", "obnoxious", "obscure", "obstacle", 
+        "occasion", "occasionally", "occur", "odor", "offense", "oneself", "opossum", "opponent", "optimism", 
+        "organization", "organize", "pageant", "pamphlet", "parse", "particular", "persist", "persuade", 
+        "perspire", "pleat", "plethora", "policeman", "potato", "prairie", "predecessor", "presage", 
+        "pretzel", "prostrate", "protocol", "puddle", "putter", "quandary", "quantity", "rabbid", "ransack", 
+        "rapport", "raucous", "receipt", "recline", "recluse", "recognize", "recreation", "reccouring", 
+        "rodeo", "rotund", "safety", "salvation", "saturate", "savor", "scholastic"
     ];
 
     let currentWordIndex = 0;
+    let currentWord = spellings[currentWordIndex];
 
-    function nextWord() {
-        const inputField = document.getElementById("user-input");
-        const feedback = document.getElementById("feedback");
-        const wordDisplay = document.getElementById("word-to-spell");
-        
-        feedback.textContent = "";
-        inputField.value = "";
-        
-        if (currentWordIndex < words.length) {
-            wordDisplay.textContent = words[currentWordIndex];
-            inputField.focus();
-        } else {
-            wordDisplay.textContent = "Game Over! You've completed all words.";
-            document.getElementById("next-btn").textContent = "Restart";
-            currentWordIndex = -1; // to restart the game
-        }
+    function speakSpelling(word) {
+        const utterance = new SpeechSynthesisUtterance(word);
+        window.speechSynthesis.speak(utterance);
     }
 
     function checkSpelling() {
-        const userInput = document.getElementById("user-input").value.trim().toLowerCase();
-        const correctWord = words[currentWordIndex].toLowerCase();
+        const userInput = document.getElementById("userInput").value.trim();
         const feedback = document.getElementById("feedback");
 
-        if (userInput === correctWord) {
-            feedback.textContent = "Correct! Well done!";
+        if (userInput.toLowerCase() === currentWord.toLowerCase()) {
+            feedback.textContent = "Correct!";
             feedback.style.color = "green";
-            currentWordIndex++;
-            setTimeout(nextWord, 1000); // Move to the next word after a brief pause
+            nextWord();
+        } else if (userInput === "yes") {
+            speakSpelling(currentWord);
+            feedback.textContent = "";
+        } else if (userInput === "no") {
+            feedback.textContent = `Ok. Try again! ${currentWord}`;
+            speakSpelling(currentWord);
         } else {
-            feedback.textContent = "Incorrect. Try again!";
-            feedback.style.color = "red";
+            feedback.textContent = `Incorrect. Try again! ${currentWord}`;
+            speakSpelling(currentWord);
         }
     }
 
-    document.getElementById("user-input").addEventListener("input", checkSpelling);
+    function nextWord() {
+        currentWordIndex++;
+        if (currentWordIndex < spellings.length) {
+            currentWord = spellings[currentWordIndex];
+            document.getElementById("word").textContent = currentWord;
+        } else {
+            feedback.textContent = "You've completed the game!";
+            document.getElementById("word").textContent = "";
+        }
+        document.getElementById("userInput").value = "";
+    }
+
+    // Start the game
+    document.getElementById("word").textContent = currentWord;
 </script>
 
 </body>
