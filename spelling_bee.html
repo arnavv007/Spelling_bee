@@ -36,7 +36,7 @@
 <body>
     <h1>Spelling Test</h1>
     <button id="startBtn">Start</button>
-    <button id="saySpellingBtn" style="display:none;">Say Spelling</button> <!-- New button -->
+    <button id="hearBtn" style="display:none;">Hear Spelling</button> <!-- New Hear button -->
     <div id="spellingDisplay"></div>
     <div id="inputArea" style="display:none;">
         <input type="text" id="userInput" placeholder="Type the word here">
@@ -89,7 +89,7 @@
         const inputArea = document.getElementById("inputArea");
         const userInput = document.getElementById("userInput");
         const submitBtn = document.getElementById("submitBtn");
-        const saySpellingBtn = document.getElementById("saySpellingBtn");
+        const hearBtn = document.getElementById("hearBtn");
 
         // Function to speak the spelling
         function speakSpelling(spelling) {
@@ -109,11 +109,11 @@
             inputArea.style.display = "block"; // Show the input area
             speakSpelling(currentSpelling);
             showFeedback(`Spelling #${currentIndex + 1}: Please type the word.`);
-            saySpellingBtn.style.display = "inline"; // Show the "Say Spelling" button
+            hearBtn.style.display = "inline"; // Show the Hear Spelling button
         });
 
-        // "Say Spelling" button to repeat the current spelling
-        saySpellingBtn.addEventListener("click", function() {
+        // Hear button to repeat the current spelling
+        hearBtn.addEventListener("click", function() {
             speakSpelling(currentSpelling);
         });
 
