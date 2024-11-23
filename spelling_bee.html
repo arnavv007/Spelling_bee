@@ -19,14 +19,17 @@
             font-size: 24px;
             margin-top: 20px;
         }
+        #feedback {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        #inputArea {
+            margin-top: 20px;
+        }
         footer {
             margin-top: 40px;
             font-size: 14px;
             color: #888;
-        }
-        .feedback {
-            font-size: 18px;
-            margin-top: 20px;
         }
     </style>
 </head>
@@ -34,7 +37,11 @@
     <h1>Spelling Test</h1>
     <button id="startBtn">Start</button>
     <div id="spellingDisplay"></div>
-    <div id="feedback" class="feedback"></div>
+    <div id="inputArea" style="display:none;">
+        <input type="text" id="userInput" placeholder="Type the word here">
+        <button id="submitBtn">Submit</button>
+    </div>
+    <div id="feedback"></div>
     <footer>
         <p>Made by Arnav Verma</p>
     </footer>
@@ -78,6 +85,9 @@
         let currentSpelling = spellings[currentIndex];
         const feedbackDiv = document.getElementById("feedback");
         const startBtn = document.getElementById("startBtn");
+        const inputArea = document.getElementById("inputArea");
+        const userInput = document.getElementById("userInput");
+        const submitBtn = document.getElementById("submitBtn");
 
         // Function to speak the spelling
         function speakSpelling(spelling) {
@@ -86,47 +96,57 @@
             speechSynthesis.speak(speech);
         }
 
-        // Function to show typing effect
-        function typeFeedback(feedbackText) {
-            let i = 0;
-            feedbackDiv.textContent = "";
-            const interval = setInterval(() => {
-                feedbackDiv.textContent += feedbackText[i];
-                i++;
-                if (i === feedbackText.length) {
-                    clearInterval(interval);
-                }
-            }, 100);
+        // Function to display feedback and wait for input
+        function showFeedback(message) {
+            feedbackDiv.textContent = message;
         }
 
         // Start button to begin the test
         startBtn.addEventListener("click", function() {
             startBtn.disabled = true; // Disable the start button
+            inputArea.style.display = "block"; // Show the input area
             speakSpelling(currentSpelling);
-            typeFeedback(`Spelling #${currentIndex + 1}: Please type the word!`);
+            showFeedback(`Spelling #${currentIndex + 1}: Please type the word.`);
         });
 
-        // Listen for input from the user
-        window.addEventListener("keydown", function(event) {
-            if (event.key === "Enter") {
-                const userInput = prompt("Enter the spelling:");
-                if (userInput.toLowerCase() === currentSpelling.toLowerCase()) {
-                    typeFeedback("Correct! Saying next spelling...");
-                    currentIndex++;
-                    if (currentIndex < spellings.length) {
-                        currentSpelling = spellings[currentIndex];
-                        setTimeout(() => {
+        // Submit button to check the answer
+        submitBtn.addEventListener("click", function() {
+            const userAnswer = userInput.value.trim();
+            if (userAnswer.toLowerCase() === currentSpelling.toLowerCase()) {
+                showFeedback("Correct! Type 'yes' to move to the next spelling or 'no' to try again.");
+                inputArea.style.display = "none"; // Hide the input field until the user responds
+                let correctAnswer = true;
+                const waitForResponse = function(event) {
+                    if (event.key.toLowerCase() === 'y') {
+                        // Proceed to next spelling
+                        currentIndex++;
+                        if (currentIndex < spellings.length) {
+                            currentSpelling = spellings[currentIndex];
                             speakSpelling(currentSpelling);
-                            typeFeedback(`Spelling #${currentIndex + 1}: Please type the word!`);
-                        }, 1000);
-                    } else {
-                        typeFeedback("You've completed all the spellings!");
+                            showFeedback(`Spelling #${currentIndex + 1}: Please type the word.`);
+                            inputArea.style.display = "block"; // Show the input field again
+                            userInput.value = ""; // Clear the input field
+                        } else {
+                            showFeedback("You've completed all the spellings!");
+                        }
+                        document.removeEventListener("keydown", waitForResponse);
+                    } else if (event.key.toLowerCase() === 'n') {
+                        // Retry the same spelling
+                        showFeedback("Try again!");
+                        speakSpelling(currentSpelling);
+                        inputArea.style.display = "block"; // Show the input field again
+                        userInput.value = ""; // Clear the input field
+                        document.removeEventListener("keydown", waitForResponse);
                     }
-                } else {
-                    typeFeedback("Incorrect! Try again.");
-                }
+                };
+                document.addEventListener("keydown", waitForResponse);
+            } else {
+                showFeedback("Incorrect! Try again.");
+                inputArea.style.display = "block"; // Show the input field again
+                userInput.value = ""; // Clear the input field
             }
         });
     </script>
 </body>
 </html>
+
