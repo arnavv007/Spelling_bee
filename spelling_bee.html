@@ -76,7 +76,6 @@
 
         let currentIndex = 0;
         let currentSpelling = spellings[currentIndex];
-        const spellingDisplay = document.getElementById("spellingDisplay");
         const feedbackDiv = document.getElementById("feedback");
         const startBtn = document.getElementById("startBtn");
 
@@ -104,7 +103,7 @@
         startBtn.addEventListener("click", function() {
             startBtn.disabled = true; // Disable the start button
             speakSpelling(currentSpelling);
-            typeFeedback(`Spelling #1: Please type the word!`);
+            typeFeedback(`Spelling #${currentIndex + 1}: Please type the word!`);
         });
 
         // Listen for input from the user
