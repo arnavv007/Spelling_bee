@@ -41,18 +41,27 @@
             font-size: 16px;
             width: 200px;
         }
+        footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #777;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>Spelling Game</h1>
-    <p id="word" class="spelling"></p>
+    <p id="currentWordIndex"></p>
     <input type="text" id="userInput" placeholder="Type the spelling" />
     <button class="button" onclick="checkSpelling()">Submit</button>
     <p class="feedback" id="feedback"></p>
     <p id="instructions">Type the spelling or type "yes" to hear it again, or "no" if you don't know it.</p>
 </div>
+
+<footer>
+    <p>Made by Arnav Verma</p>
+</footer>
 
 <script>
     const spellings = [
@@ -92,8 +101,10 @@
     let currentWordIndex = 0;
     let currentWord = spellings[currentWordIndex];
 
+    // Function to speak the spelling slowly
     function speakSpelling(word) {
         const utterance = new SpeechSynthesisUtterance(word);
+        utterance.rate = 0.7;  // Adjusts the speech speed to be slower
         window.speechSynthesis.speak(utterance);
     }
 
@@ -121,16 +132,17 @@
         currentWordIndex++;
         if (currentWordIndex < spellings.length) {
             currentWord = spellings[currentWordIndex];
-            document.getElementById("word").textContent = currentWord;
+            document.getElementById("currentWordIndex").textContent = `Spelling ${currentWordIndex + 1} of ${spellings.length}`;
         } else {
             feedback.textContent = "You've completed the game!";
-            document.getElementById("word").textContent = "";
+            document.getElementById("currentWordIndex").textContent = "";
         }
         document.getElementById("userInput").value = "";
     }
 
-    // Start the game
-    document.getElementById("word").textContent = currentWord;
+    // Start the game by speaking the first word
+    speakSpelling(currentWord);
+    document.getElementById("currentWordIndex").textContent = `Spelling ${currentWordIndex + 1} of ${spellings.length}`;
 </script>
 
 </body>
